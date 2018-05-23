@@ -43,35 +43,36 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    inner class SectionsPagerAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {
-        private val links = arrayListOf(
-                "https://media1.giphy.com/media/tXL4FHPSnVJ0A/giphy.gif",
-                "https://media0.giphy.com/media/o5oLImoQgGsKY/giphy.gif",
-                "https://media2.giphy.com/media/u5eXlkXWkrITm/giphy.gif",
-                "https://media3.giphy.com/media/o0vwzuFwCGAFO/giphy.gif",
-                "https://media1.giphy.com/media/7NoNw4pMNTvgc/giphy.gif",
-                "https://media0.giphy.com/media/tBxyh2hbwMiqc/giphy.gif"
-        )
-        val types: MutableList<FragmentType> = (1..links.size).map { Normal(links[it-1]) }.toMutableList()
-        override fun getItem(position: Int): Fragment {
-            val type = types[position]
-            return when(type) {
-                is Normal -> PlaceholderFragment.newInstance(type.link)
-                else -> BlackFragment.newInstance()
-            }
-        }
 
-        override fun getItemPosition(`object`: Any): Int {
-            return PagerAdapter.POSITION_NONE
+}
+class SectionsPagerAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {
+    private val links = arrayListOf(
+            "https://media1.giphy.com/media/tXL4FHPSnVJ0A/giphy.gif",
+            "https://media0.giphy.com/media/o5oLImoQgGsKY/giphy.gif",
+            "https://media2.giphy.com/media/u5eXlkXWkrITm/giphy.gif",
+            "https://media3.giphy.com/media/o0vwzuFwCGAFO/giphy.gif",
+            "https://media1.giphy.com/media/7NoNw4pMNTvgc/giphy.gif",
+            "https://media0.giphy.com/media/tBxyh2hbwMiqc/giphy.gif"
+    )
+    val types: MutableList<FragmentType> = (1..links.size).map { Normal(links[it-1]) }.toMutableList()
+    override fun getItem(position: Int): Fragment {
+        val type = types[position]
+        return when(type) {
+            is Normal -> PlaceholderFragment.newInstance(type.link)
+            else -> BlackFragment.newInstance()
         }
+    }
 
-        override fun getCount(): Int {
-            return types.size
-        }
+    override fun getItemPosition(`object`: Any): Int {
+        return PagerAdapter.POSITION_NONE
+    }
+
+    override fun getCount(): Int {
+        return types.size
     }
 }
 
-class DeleteActionViewController(val viewPager: ViewPager, val adapter: MainActivity.SectionsPagerAdapter) {
+class DeleteActionViewController(val viewPager: ViewPager, val adapter: SectionsPagerAdapter) {
     val handler: Handler by lazy { Handler() }
     fun deleteCurrentItem() {
 
@@ -85,8 +86,6 @@ class DeleteActionViewController(val viewPager: ViewPager, val adapter: MainActi
             adapter.hasPrev(curPos) -> viewPager.currentItem - 1
             else -> viewPager.currentItem
         }
-
-
 
         val removed = adapter.types.removeAt(curPos)
         adapter.types.add(curPos, Black)
@@ -107,7 +106,7 @@ class DeleteActionViewController(val viewPager: ViewPager, val adapter: MainActi
     }
 }
 
-private fun MainActivity.SectionsPagerAdapter.hasPrev(curPos: Int): Boolean =
+private fun SectionsPagerAdapter.hasPrev(curPos: Int): Boolean =
         curPos != 0
-private fun MainActivity.SectionsPagerAdapter.hasNext(curPos: Int): Boolean =
+private fun SectionsPagerAdapter.hasNext(curPos: Int): Boolean =
         curPos < types.size - 1
