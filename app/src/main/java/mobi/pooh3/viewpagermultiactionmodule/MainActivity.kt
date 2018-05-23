@@ -42,8 +42,6 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
-
-
 }
 class SectionsPagerAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {
     private val links = arrayListOf(
@@ -82,8 +80,8 @@ class DeleteActionViewController(val viewPager: ViewPager, val adapter: Sections
 
         val curPos = viewPager.currentItem
         val nextPos = when {
-            adapter.hasNext(curPos) -> viewPager.currentItem + 1
-            adapter.hasPrev(curPos) -> viewPager.currentItem - 1
+            adapter.hasNextAt(curPos) -> viewPager.currentItem + 1
+            adapter.hasPrevAt(curPos) -> viewPager.currentItem - 1
             else -> viewPager.currentItem
         }
 
@@ -106,7 +104,8 @@ class DeleteActionViewController(val viewPager: ViewPager, val adapter: Sections
     }
 }
 
-private fun SectionsPagerAdapter.hasPrev(curPos: Int): Boolean =
+@Suppress("unused")
+private fun SectionsPagerAdapter.hasPrevAt(curPos: Int): Boolean =
         curPos != 0
-private fun SectionsPagerAdapter.hasNext(curPos: Int): Boolean =
+private fun SectionsPagerAdapter.hasNextAt(curPos: Int): Boolean =
         curPos < types.size - 1
